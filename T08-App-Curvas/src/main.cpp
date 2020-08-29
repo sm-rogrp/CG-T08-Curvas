@@ -1,6 +1,6 @@
-#include "imgui\imgui.h"
-#include "imgui\imgui_impl_glfw.h"
-#include "imgui\imgui_impl_opengl3.h"
+#include "..\imgui\imgui.h"
+#include "..\imgui\imgui_impl_glfw.h"
+#include "..\imgui\imgui_impl_opengl3.h"
 
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
@@ -394,7 +394,7 @@ void display(GLFWwindow *window, double currentTime) {
     ImGui::NewFrame();
 
     glEnable(GL_LINE_SMOOTH);
-    glLineWidth(2);
+    glLineWidth(5);
     // glDisable(GL_LINE_SMOOTH);
 
     ImGui::ColorEdit3("Color de fondo", (float*)&fondo);
