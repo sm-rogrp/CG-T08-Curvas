@@ -228,7 +228,7 @@ void init(GLFWwindow *window) {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
-    renderingProgram = Utils::createShaderProgram("vertShader.glsl", "fragShader.glsl");
+    renderingProgram = Utils::createShaderProgram("src\\vertShader.glsl", "src\\fragShader.glsl");
     glUseProgram(renderingProgram);
     
     setupVertices();
