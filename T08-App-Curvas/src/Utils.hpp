@@ -11,6 +11,19 @@ namespace Utils{
     std::string readShader(const char *filePath) {
         std::string content;
         std::ifstream fileStream(filePath, std::ios::in);
+
+        /*************** Check if shader files are being read ***************/
+        // Shader not found
+        if(fileStream.fail()){
+            std::cout << "Shader file not found at " << filePath << "\n";
+            exit(-1);
+        }
+        // Shader found
+        else{
+            std::cout << "Shader file read at " << filePath << "\n";
+        }
+        /********************************************************************/
+
         std::string line = "";
 
         while(getline(fileStream, line)) {
