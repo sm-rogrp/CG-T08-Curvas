@@ -406,7 +406,7 @@ void display(GLFWwindow *window, double currentTime) {
     if (ImGui::SliderFloat("Altura de pelo", &alturaPelos, 0.0f, 10.0f)){
         setupVertices();
     }
-    if (ImGui::Button("Imprimir puntos \nde control actuales \n(Presione 'P')")){
+    if (ImGui::Button("Imprimir puntos de control actuales \n(Presione 'P')")){
         printPuntosControl();
     }
 
