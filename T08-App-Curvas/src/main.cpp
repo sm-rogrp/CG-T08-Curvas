@@ -2,6 +2,8 @@
 #include "imgui\imgui_impl_glfw.h"
 #include "imgui\imgui_impl_opengl3.h"
 
+#include "..\irrklang\irrKlang.h"
+
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
@@ -15,6 +17,13 @@
 
 #include "Utils.hpp"
 #include "curvas.h"
+
+using namespace std;
+using namespace irrklang;
+// #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
+
+// for audio
+ISoundEngine* engine_audio;
 
 #define LOG(x) cout << "[LOG]\t" << (x) << endl
 #define numVAOs 1
@@ -40,7 +49,7 @@
 #define WIDTH 800
 #define HEIGHT 800
 
-using namespace std;
+
 
 /* VARIABLES GLOBALES */
 float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 1.0f;
@@ -163,6 +172,8 @@ int vertClickeado = -1;
 bool edit_mode = false;
 bool anim_ojos = false;
 bool mode_mouse_coord = false;
+bool opening_play = true;
+
 bool clickPuntoControl(glm::vec2 center, float x, float y);
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
 void cursor_position_callback(GLFWwindow *window, double xpos, double ypos);
@@ -192,6 +203,13 @@ int main()
     cout << "GL_VERSION: " << glGetString(GL_VERSION) << endl;
     glfwSwapInterval(0);
 
+    engine_audio = createIrrKlangDevice();
+    if (!engine_audio){
+        cout<<"Error engine audio"<<endl;
+        return 0;
+    }
+    engine_audio->play2D("opening.mp3", true);
+
     init(window);
 
     while (!glfwWindowShouldClose(window))
@@ -200,6 +218,8 @@ int main()
         display(window, glfwGetTime());
         glfwSwapBuffers(window);
     }
+
+    engine_audio->drop(); // delete engine_audio
 
     glDeleteBuffers(numVBOs, vbo);
     glDeleteShader(renderingProgram);
@@ -423,6 +443,11 @@ void display(GLFWwindow *window, double currentTime)
         setupVertices();
     }
 
+    if(ImGui::Checkbox("Reproducir opening", &opening_play)){
+        if(opening_play) engine_audio->play2D("opening.mp3", true);
+        else engine_audio->stopAllSounds();
+    }
+
     if (ImGui::SliderInt("Cantidad de pelos", &cantPelosBart, 3, 30))
     {
         setupVertices();
@@ -431,17 +456,15 @@ void display(GLFWwindow *window, double currentTime)
     {
         setupVertices();
     }
-//<<<<<<< HEAD
+
+
+
     if (ImGui::Button("Imprimir puntos de control actuales \n(Presione 'P')")){
-//=======
-//    if (ImGui::Button("Imprimir puntos \nde control actuales \n(Presione 'P')"))
-//    {
-//>>>>>>> add iris animation
         printPuntosControl();
     }
 
     ImGui::Separator();
-    ImGui::Text("Promedio de aplicación %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Rendimiento %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::Separator();
 
     glClearColor(fondo.x, fondo.y, fondo.z, fondo.w);
