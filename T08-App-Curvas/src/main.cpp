@@ -50,7 +50,6 @@ ISoundEngine* engine_audio;
 #define HEIGHT 800
 
 
-
 /* VARIABLES GLOBALES */
 float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 1.0f;
 float objLocX = 0.0f, objLocY = -0.4f, objLocZ = 0.0f;
@@ -183,7 +182,8 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 /*------------------------------ [IMGUI] -------------------------------*/
 ImVec4 fondo = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-ImVec4 bart = ImVec4(217.0f / 255.0f, 199.0f / 255.0f, 10.0f / 255.0f, 1.00f); // original color bart
+ImVec4 bart = ImVec4(255.0f / 255.0f, 217.0f / 255.0f, 15.0f / 255.0f, 1.00f); // original color bart
+/*from: https://www.colourlovers.com/color/FFD90F/the_simpsons_yellow*/
 /*---------- ----------------------------------------------------------*/
 
 int main()
@@ -211,6 +211,8 @@ int main()
     engine_audio->play2D("opening.mp3", true);
 
     init(window);
+
+    glfwSetWindowSize(window, 1300, 800);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -263,9 +265,8 @@ void init(GLFWwindow *window)
 
     setupVertices();
 
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    float aspect = (float)width / (float)height;
+
+    float aspect = (float)WIDTH / (float)HEIGHT;
     pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f);
     glUniform2f(glGetUniformLocation(renderingProgram, "u_resolution"), (float)WIDTH, (float)HEIGHT);
     vMat = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraX, -cameraY, -cameraZ));
