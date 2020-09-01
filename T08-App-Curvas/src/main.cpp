@@ -49,7 +49,6 @@ ISoundEngine* engine_audio;
 #define WIDTH 800
 #define HEIGHT 800
 
-
 /* VARIABLES GLOBALES */
 float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 1.0f;
 float objLocX = 0.0f, objLocY = -0.4f, objLocZ = 0.0f;
@@ -181,7 +180,7 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 /*----------------------------------------------------------------------*/
 
 /*------------------------------ [IMGUI] -------------------------------*/
-ImVec4 fondo = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+ImVec4 fondo = ImVec4(0.0f, 0.8f, 1.0f, 1.00f);
 ImVec4 bart = ImVec4(255.0f / 255.0f, 217.0f / 255.0f, 15.0f / 255.0f, 1.00f); // original color bart
 /*from: https://www.colourlovers.com/color/FFD90F/the_simpsons_yellow*/
 /*---------- ----------------------------------------------------------*/
