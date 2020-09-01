@@ -46,8 +46,8 @@ ISoundEngine* engine_audio;
  * */
 
 #define PI 3.14
-#define WIDTH 800
-#define HEIGHT 800
+#define WIDTH 600
+#define HEIGHT 600
 
 /* VARIABLES GLOBALES */
 float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 1.0f;
@@ -190,7 +190,10 @@ int main()
     if (!glfwInit())
         exit(EXIT_FAILURE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
+
+
     GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Curvas-04-wcontrols: Mueva los puntos de control", NULL, NULL);
     glfwMakeContextCurrent(window);
     glfwSetCursorPosCallback(window, cursor_position_callback);
@@ -211,7 +214,7 @@ int main()
 
     init(window);
 
-    glfwSetWindowSize(window, 1300, 800);
+    glfwSetWindowSize(window, WIDTH*1.5, HEIGHT);
 
     while (!glfwWindowShouldClose(window))
     {
