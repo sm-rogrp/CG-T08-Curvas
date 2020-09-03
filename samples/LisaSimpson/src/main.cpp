@@ -17,7 +17,7 @@
 using namespace std;
 #define doublePi 6.28
 #define CUBIC 4 // Type = grade + 1
-#define NUM_VBOs 8
+#define NUM_VBOs 14
 int nPointsCurveBz[NUM_VBOs];
 GLuint renderingProgram, m_VAO, m_VBO[NUM_VBOs];
 
@@ -71,30 +71,11 @@ float factorial(int n) {
 }
 
 void drawCircle(GLfloat myCircle[],
-		GLfloat x, GLfloat y, GLfloat z,
-		GLfloat red, GLfloat green, GLfloat blue,
-		GLfloat radius, GLint numVertices){
-	GLint numSides = numVertices-2;
-	//Arrays temporales para obtener coordenadas
-	GLfloat verticesX[numVertices];
-	GLfloat verticesY[numVertices];
-	GLfloat verticesZ[numVertices];
-	verticesX[0] = x;
-	verticesY[0] = y;
-	verticesZ[0] = z;
-	for (int i = 1; i < numVertices; i++) {
-		verticesX[i] = x + (radius * cos(i * doublePi / numSides));
-		verticesY[i] = y + (radius * sin(i * doublePi / numSides));
-		verticesZ[i] = z;
-	}
-	//Copiamos al array principal
+		GLfloat x, GLfloat y, GLfloat radius, GLint numVertices){
+	GLint numSides = numVertices - 1;
 	for (int i = 0; i < numVertices; i++) {
-		myCircle[i * 6] = verticesX[i];
-		myCircle[i * 6 + 1] = verticesY[i];
-		myCircle[i * 6 + 2] = verticesZ[i];
-		myCircle[i * 6 + 3] = red;
-		myCircle[i * 6 + 4] = green;
-		myCircle[i * 6 + 5] = blue;
+		myCircle[i * 2] = x + (radius * cos(i * doublePi / numSides));
+		myCircle[i * 2 + 1] = y + (radius * sin(i * doublePi / numSides));
 	}
 }
 
@@ -117,17 +98,6 @@ vector<float> drawBezierCurve(GLfloat pCtrl[][2], int type) {
 		temp.push_back(bernstein(t, 1, pCtrl, grade));
 	}
 	return temp;
-}
-
-
-vector<float> graficaPuntosBezier(GLfloat ctrlPoints[][2], int type) {
-  int grade = type - 1;
-  vector<float> temp;
-  for (int i = 0; i <= grade; i++) {
-    temp.push_back(ctrlPoints[i][0]);
-    temp.push_back(ctrlPoints[i][1]);
-  }
-  return temp;
 }
 
 void init (GLFWwindow* window) {
@@ -190,6 +160,55 @@ void init (GLFWwindow* window) {
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[7]);
 	glBufferData(GL_ARRAY_BUFFER, pOrejaCuello.size() * sizeof(GLfloat),
 					(void*)&pOrejaCuello[0], GL_STATIC_DRAW);
+
+	// VBO[8] Perla
+	GLint numVertices = 20;
+	nPointsCurveBz[8] = 2 * numVertices;
+	GLfloat pPerla[nPointsCurveBz[8]];
+	drawCircle(pPerla, 0.2, -0.2, 0.01, numVertices);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[8]);
+	glBufferData(GL_ARRAY_BUFFER, nPointsCurveBz[8] * sizeof(GLfloat),
+					(void*)&pPerla[0], GL_STATIC_DRAW);
+
+	// VBO[9] Perla
+	nPointsCurveBz[9] = 2 * numVertices;
+	GLfloat pPerla2[nPointsCurveBz[9]];
+	drawCircle(pPerla2, 0, -0.2, 0.01, numVertices);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[9]);
+	glBufferData(GL_ARRAY_BUFFER, nPointsCurveBz[9] * sizeof(GLfloat),
+					(void*)&pPerla2[0], GL_STATIC_DRAW);
+
+	// VBO[10] Perla
+	nPointsCurveBz[10] = 2 * numVertices;
+	GLfloat pPerla3[nPointsCurveBz[10]];
+	drawCircle(pPerla3, 0.1, -0.2, 0.01, numVertices);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[10]);
+	glBufferData(GL_ARRAY_BUFFER, nPointsCurveBz[10] * sizeof(GLfloat),
+					(void*)&pPerla3[0], GL_STATIC_DRAW);
+	// VBO[11] Perla
+	nPointsCurveBz[11] = 2 * numVertices;
+	GLfloat pPerla4[nPointsCurveBz[11]];
+	drawCircle(pPerla4, -0.1, -0.2, 0.01, numVertices);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[11]);
+	glBufferData(GL_ARRAY_BUFFER, nPointsCurveBz[11] * sizeof(GLfloat),
+					(void*)&pPerla4[0], GL_STATIC_DRAW);
+
+	// VBO[12] Perla
+	nPointsCurveBz[12] = 2 * numVertices;
+	GLfloat pPerla5[nPointsCurveBz[12]];
+	drawCircle(pPerla5, -0.2, -0.2, 0.01, numVertices);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[12]);
+	glBufferData(GL_ARRAY_BUFFER, nPointsCurveBz[12] * sizeof(GLfloat),
+					(void*)&pPerla5[0], GL_STATIC_DRAW);
+
+	// VBO[13] Ojo Derecho
+	nPointsCurveBz[13] = 2 * numVertices;
+	GLfloat pOjoDer[nPointsCurveBz[13]];
+	drawCircle(pOjoDer, 0, 0.05, 0.02, numVertices);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[13]);
+	glBufferData(GL_ARRAY_BUFFER, nPointsCurveBz[13] * sizeof(GLfloat),
+					(void*)&pOjoDer[0], GL_STATIC_DRAW);
+
 }
 
 void display(GLFWwindow* window, double currentTime) {
@@ -240,6 +259,36 @@ void display(GLFWwindow* window, double currentTime) {
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[7]);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
 	glDrawArrays(GL_LINE_STRIP, 0, nPointsCurveBz[7]);
+
+	// Draw perla 1
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[8]);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, nPointsCurveBz[8]);
+
+	// Draw perla 2
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[9]);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, nPointsCurveBz[9]);
+
+	// Draw perla 3
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[10]);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, nPointsCurveBz[10]);
+
+	// Draw perla 4
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[11]);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, nPointsCurveBz[11]);
+
+	// Draw perla 5
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[12]);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, nPointsCurveBz[12]);
+
+	// Draw perla 5
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[13]);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, nPointsCurveBz[13]);
 }
 
 int main(void) {
