@@ -16,14 +16,29 @@
 
 using namespace std;
 #define CUBIC 4 // Type = grade + 1
-#define NUM_VBOs 5
+#define NUM_VBOs 8
 int nPointsCurveBz[NUM_VBOs];
 GLuint renderingProgram, m_VAO, m_VBO[NUM_VBOs];
 
 // Float
 GLfloat oreja[CUBIC][2] = {
-		{-0.125, 0.0}, {-0.15, 0.0},
-		{-0.15, -0.03}, {-0.125,-0.03}
+		{-0.125, 0.0}, {-0.175, 0.03},
+		{-0.175, -0.06}, {-0.125,-0.03}
+};
+
+GLfloat orejaDet1[CUBIC][2] = {
+		{-0.13, -0.01}, {-0.13, -0.005},
+		{-0.15, -0.0}, {-0.15,-0.01}
+};
+
+GLfloat orejaDet2[CUBIC][2] = {
+		{-0.14, -0.006}, {-0.145, -0.006},
+		{-0.145, -0.022}, {-0.14,-0.022}
+};
+
+GLfloat orejaCuello[CUBIC][2] = {
+		{-0.125, -0.03}, {-0.120, -0.05},
+		{-0.120, -0.18}, {-0.125,-0.2}
 };
 
 GLfloat nariz[CUBIC][2] = {
@@ -124,6 +139,27 @@ void init (GLFWwindow* window) {
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[4]);
 	glBufferData(GL_ARRAY_BUFFER, pOjoIzq.size() * sizeof(GLfloat),
 					(void*)&pOjoIzq[0], GL_STATIC_DRAW);
+
+	// VBO[5]
+	vector<float> pOrejaDet1 = drawBezierCurve(orejaDet1, CUBIC);
+	nPointsCurveBz[5] = pOrejaDet1.size() / 2;
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[5]);
+	glBufferData(GL_ARRAY_BUFFER, pOrejaDet1.size() * sizeof(GLfloat),
+					(void*)&pOrejaDet1[0], GL_STATIC_DRAW);
+
+	// VBO[6]
+	vector<float> pOrejaDet2 = drawBezierCurve(orejaDet2, CUBIC);
+	nPointsCurveBz[6] = pOrejaDet2.size() / 2;
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[6]);
+	glBufferData(GL_ARRAY_BUFFER, pOrejaDet2.size() * sizeof(GLfloat),
+					(void*)&pOrejaDet2[0], GL_STATIC_DRAW);
+
+	// VBO[7]
+	vector<float> pOrejaCuello = drawBezierCurve(orejaCuello, CUBIC);
+	nPointsCurveBz[7] = pOrejaCuello.size() / 2;
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[7]);
+	glBufferData(GL_ARRAY_BUFFER, pOrejaCuello.size() * sizeof(GLfloat),
+					(void*)&pOrejaCuello[0], GL_STATIC_DRAW);
 }
 
 void display(GLFWwindow* window, double currentTime) {
@@ -159,6 +195,21 @@ void display(GLFWwindow* window, double currentTime) {
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[4]);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
 	glDrawArrays(GL_LINE_STRIP, 0, nPointsCurveBz[4]);
+
+	// Draw orejaDet1
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[5]);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	glDrawArrays(GL_LINE_STRIP, 0, nPointsCurveBz[5]);
+
+	// Draw orejaDet2
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[6]);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	glDrawArrays(GL_LINE_STRIP, 0, nPointsCurveBz[6]);
+
+	// Draw orejaCuello
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[7]);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), 0);
+	glDrawArrays(GL_LINE_STRIP, 0, nPointsCurveBz[7]);
 }
 
 int main(void) {
