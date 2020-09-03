@@ -15,12 +15,12 @@
 #include <cmath>
 
 using namespace std;
+#define doublePi 6.28
 #define CUBIC 4 // Type = grade + 1
 #define NUM_VBOs 8
 int nPointsCurveBz[NUM_VBOs];
 GLuint renderingProgram, m_VAO, m_VBO[NUM_VBOs];
 
-// Float
 GLfloat oreja[CUBIC][2] = {
 		{-0.125, 0.0}, {-0.175, 0.03},
 		{-0.175, -0.06}, {-0.125,-0.03}
@@ -62,6 +62,7 @@ GLfloat ojoIzq[CUBIC][2] = {
 };
 
 
+
 float factorial(int n) {
   float p = 1;
   for (int i = 2; i <= n; i++)
@@ -69,14 +70,42 @@ float factorial(int n) {
   return p;
 }
 
-float CoefNewton(int n, int k) {
+void drawCircle(GLfloat myCircle[],
+		GLfloat x, GLfloat y, GLfloat z,
+		GLfloat red, GLfloat green, GLfloat blue,
+		GLfloat radius, GLint numVertices){
+	GLint numSides = numVertices-2;
+	//Arrays temporales para obtener coordenadas
+	GLfloat verticesX[numVertices];
+	GLfloat verticesY[numVertices];
+	GLfloat verticesZ[numVertices];
+	verticesX[0] = x;
+	verticesY[0] = y;
+	verticesZ[0] = z;
+	for (int i = 1; i < numVertices; i++) {
+		verticesX[i] = x + (radius * cos(i * doublePi / numSides));
+		verticesY[i] = y + (radius * sin(i * doublePi / numSides));
+		verticesZ[i] = z;
+	}
+	//Copiamos al array principal
+	for (int i = 0; i < numVertices; i++) {
+		myCircle[i * 6] = verticesX[i];
+		myCircle[i * 6 + 1] = verticesY[i];
+		myCircle[i * 6 + 2] = verticesZ[i];
+		myCircle[i * 6 + 3] = red;
+		myCircle[i * 6 + 4] = green;
+		myCircle[i * 6 + 5] = blue;
+	}
+}
+
+float newtonQ(int n, int k) {
   return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
 float bernstein(float t, int axis, GLfloat ctrlPoints[][2], int grade) {
 	float suma = 0.0;
 	for (int i = 0; i <= grade; i++)
-		suma += ctrlPoints[i][axis] * CoefNewton(grade, i) * pow(t, grade - i) * pow(1.0 - t, i);
+		suma += ctrlPoints[i][axis] * newtonQ(grade, i) * pow(t, grade - i) * pow(1.0 - t, i);
 	return suma;
 }
 
@@ -89,6 +118,7 @@ vector<float> drawBezierCurve(GLfloat pCtrl[][2], int type) {
 	}
 	return temp;
 }
+
 
 vector<float> graficaPuntosBezier(GLfloat ctrlPoints[][2], int type) {
   int grade = type - 1;
